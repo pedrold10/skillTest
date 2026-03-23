@@ -65,8 +65,25 @@ const handleGetStudentDetail = asyncHandler(async (req, res) => {
 });
 
 const handleStudentStatus = asyncHandler(async (req, res) => {
-    //write your code
+    const { id } = req.params;
+    const { status } = req.body;
 
+    if (!status) {
+        res.status(400);
+        throw new Error("Status is required");
+    }
+
+    const updatedStudent = await setStudentStatus(id, status);
+
+    if (!updatedStudent) {
+        res.status(404);
+        throw new Error("Student not found");
+    }
+
+    res.status(200).json({
+        success: true,
+        data: updatedStudent,
+    });
 });
 
 module.exports = {
