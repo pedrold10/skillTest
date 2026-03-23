@@ -27,8 +27,25 @@ const handleAddStudent = asyncHandler(async (req, res) => {
 });
 
 const handleUpdateStudent = asyncHandler(async (req, res) => {
-    //write your code
+    const { id } = req.params;
+    const studentData = req.body;
 
+    if (!studentData || Object.keys(studentData).length === 0) {
+        res.status(400);
+        throw new Error("Student data is required");
+    }
+
+    const updatedStudent = await updateStudent(id, studentData);
+
+    if (!updatedStudent) {
+        res.status(404);
+        throw new Error("Student not found");
+    }
+
+    res.status(200).json({
+        success: true,
+        data: updatedStudent,
+    });
 });
 
 const handleGetStudentDetail = asyncHandler(async (req, res) => {
